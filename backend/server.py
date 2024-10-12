@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 from pymongo import MongoClient
 
 MONGO_URI = 'mongodb+srv://shivam:shivam28@project1.kja17z2.mongodb.net/' 
@@ -6,11 +7,10 @@ DATABASE_NAME = "BlackCoffer"
 COLLECTION_NAME = "data" 
 
 app = Flask(__name__)
+CORS(app)  # Allow all origins (for development only)
 
 client = MongoClient(MONGO_URI)
-
 db = client[DATABASE_NAME]
-
 collection = db[COLLECTION_NAME]
 
 def item_to_dict(item):
