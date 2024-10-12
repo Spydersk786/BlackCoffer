@@ -6,11 +6,10 @@ DATABASE_NAME = "BlackCoffer"
 COLLECTION_NAME = "data" 
 
 app = Flask(__name__)
+CORS(app)  # Allow all origins (for development only)
 
 client = MongoClient(MONGO_URI)
-
 db = client[DATABASE_NAME]
-
 collection = db[COLLECTION_NAME]
 
 def item_to_dict(item):
