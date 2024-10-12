@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from pymongo import MongoClient
 
 MONGO_URI = 'mongodb+srv://shivam:shivam28@project1.kja17z2.mongodb.net/' 
@@ -51,5 +51,44 @@ def count_entries(field_name):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/filter', methods=['GET'])
+def filter_data():
+    try:
+        # Get query parameters
+        end_year = request.args.get('end_year')
+        topic = request.args.get('topic')  # Only allows a single topic (e.g., ?topic=topic1)
+        sector = request.args.get('sector')
+        region = request.args.get('region')
+        source = request.args.get('source')
+        country = request.args.get('country')
+        
+        # Build the query based on provided filters
+        query = {}
+        
+        if end_year:
+            query['end_year'] = int(end_year)
+        if topic:
+            query['topic'] = topic 
+        if sector:
+            query['sector'] = sector
+        if region:
+            query['region'] = region
+        if source:
+            query['source'] = source
+        if country:
+            query['country'] = country
+
+        print(query)
+        # Query the database
+        results = list(collection.find(query))
+
+        # Convert the MongoDB cursor to a JSON-compatible list
+        formatted_results = [{key: str(value) for key, value in doc.items() if key != '_id'} for doc in results]
+
+        return jsonify(formatted_results), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
