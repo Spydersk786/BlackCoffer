@@ -9,6 +9,8 @@ import Top from './components/Top';
 import IntensityPage from '../src/pages/IntensityPage';
 import LikelihoodPage from './pages/LikelihoodPage';
 import RelevancePage from './pages/RelevancePage';
+import YearAnalysisPage from './pages/YearAnalaysisPage';
+import CountryAnalaysisPage from './pages/CountryAnalaysisPage';
 
 const App = () => {
   const { activeMenu } = useStateContext();
@@ -51,8 +53,8 @@ const App = () => {
             <Route path="/intensity" element={<IntensityPage />} />
             <Route path="/likelihood" element={<LikelihoodPage/>} />
             <Route path="/relevance" element={<RelevancePage/>} />
-            <Route path="/year" element={<div>Year Page</div>} />
-            <Route path="/country" element={<div>Country Page</div>} />
+            <Route path="/year" element={<YearAnalysisPage/>} />
+            <Route path="/country" element={<CountryAnalaysisPage/>} />
           </Routes>
 
 

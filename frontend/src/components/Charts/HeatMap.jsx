@@ -18,22 +18,18 @@ const BarChart = () => {
           let othersCount = 0;
 
           data.forEach(item => {
-            // Exclude entries with blank country names
-            if (item.value.trim() === "") {
-              return; // Skip blank country names
-            }
-
+            if (item.value.trim() === "") return;
+            
             if (item.count < 19) {
-              othersCount += item.count; // Sum counts for countries with count < 19
+              othersCount += item.count;
             } else {
-              counts[item.value] = item.count; // Add countries with count >= 19
+              counts[item.value] = item.count;
             }
           });
 
           const labels = Object.keys(counts);
           const dataCounts = Object.values(counts);
 
-          // Add the "Others" category to the data
           if (othersCount > 0) {
             labels.push('Others');
             dataCounts.push(othersCount);
@@ -43,14 +39,10 @@ const BarChart = () => {
             labels,
             datasets: [
               {
-                label: 'Country Count',
+                label: 'Number of Entries',
                 data: dataCounts,
-                backgroundColor: dataCounts.map(count => {
-                  if (count > 20) return '#FF6384'; // Red for high counts
-                  if (count > 10) return '#36A2EB'; // Blue for medium counts
-                  return '#FFCE56'; // Yellow for low counts
-                }),
-                borderColor: '#000',
+                backgroundColor: 'rgba(75, 192, 192, 0.6)', // Teal color with transparency
+                borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
               },
             ],
@@ -67,40 +59,73 @@ const BarChart = () => {
   }, []);
 
   if (!chartData) {
-    return <p>Loading...</p>;
+    return <div className="flex justify-center items-center h-64">
+      <p className="text-xl font-semibold text-gray-600">Loading...</p>
+    </div>;
   }
 
   return (
-    <div>
-      <h2>Country Count Bar Chart</h2>
-      <Bar data={chartData} options={{
-        responsive: true,
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top',
-          },
-          title: {
-            display: true,
-            text: 'Count of Entries by Country',
-          },
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Countries',
+    <div className="bg-white p-6 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">Distribution of Entries by Country</h2>
+      <div className="h-[500px]">
+        <Bar 
+          data={chartData} 
+          options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                titleFont: {
+                  size: 16,
+                  weight: 'bold',
+                },
+                bodyFont: {
+                  size: 14,
+                },
+                padding: 12,
+                cornerRadius: 4,
+              },
             },
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'Count',
+            scales: {
+              x: {
+                grid: {
+                  display: false,
+                },
+                ticks: {
+                  font: {
+                    size: 12,
+                  },
+                  maxRotation: 45,
+                  minRotation: 45,
+                },
+              },
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: 'rgba(0, 0, 0, 0.1)',
+                },
+                ticks: {
+                  font: {
+                    size: 12,
+                  },
+                },
+                title: {
+                  display: true,
+                  text: 'Number of Entries',
+                  font: {
+                    size: 14,
+                    weight: 'bold',
+                  },
+                },
+              },
             },
-            beginAtZero: true,
-          },
-        },
-      }} />
+          }}
+        />
+      </div>
     </div>
   );
 };
