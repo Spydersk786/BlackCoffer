@@ -23,7 +23,7 @@ const IntensityAggregation = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5001/value-aggregation?column=intensity');
+        const response = await fetch('http://127.0.0.1:5001/value-aggregation/intensity');
         if (!response.ok) throw new Error('Network response was not ok');
         const result = await response.json();
 

@@ -118,20 +118,10 @@ def get_top_five():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@app.route('/value-aggregation', methods=['GET'])
-def value_aggregation():
+@app.route('/value-aggregation/intensity', methods=['GET'])
+def value_aggregation_intensity():
     try:
-        # Replace 'column_name' with the name of your column
-        column_name = request.args.get('column')
-
-        # Ensure the column name is provided
-        if not column_name:
-            return jsonify({"error": "Column name is required"}), 400
-        
-        allowed_fields = ['intensity', 'end_year', 'likelihood','relevance']
-
-        if column_name not in allowed_fields:
-            return jsonify({"error": f"Field must be one of {allowed_fields}"}), 400
+        column_name = 'intensity'
 
         # Aggregate unique values and their counts, ignoring string types
         data = collection.aggregate([
@@ -174,6 +164,111 @@ def value_aggregation():
             "11_30": range_11_30,
             "31_50": range_31_50,
             "greater_50": range_greater_50
+        }
+
+        return jsonify(result), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/value-aggregation/relevance', methods=['GET'])
+def value_aggregation_relevance():
+    try:
+        # Replace 'column_name' with the name of your column
+        column_name = 'relevance'
+        # Ensure the column name is provided
+        
+        data = collection.aggregate([
+            {
+                "$match": {
+                    column_name: {"$type": "number"}  # Ensures we only consider numeric values
+                }
+            },
+            {
+                "$group": {
+                    "_id": f"${column_name}",
+                    "count": {"$sum": 1}
+                }
+            }
+        ])
+
+        # Initialize counters for each range
+        range_0_3 = 0
+        range_4_7 = 0
+        range_8_10 = 0
+
+        # Iterate through the aggregated data and categorize it
+        for item in data:
+            value = item["_id"]
+            count = item["count"]
+
+            if value <= 3:
+                range_0_10 += count
+            elif 4 <= value <= 7:
+                range_11_30 += count
+            else: 
+                range_31_50 += count
+
+
+        # Return the counts as a JSON object
+        result = {
+            "0_3": range_0_3,
+            "4_7": range_4_7,
+            "8_10": range_8_10
+        }
+
+        return jsonify(result), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/value-aggregation/likelihood', methods=['GET'])
+def value_aggregation_likelihood():
+    try:
+        # Replace 'column_name' with the name of your column
+        column_name = 'likelihood'
+
+        # Aggregate unique values and their counts, ignoring string types
+        data = collection.aggregate([
+            {
+                "$match": {
+                    column_name: {"$type": "number"}  # Ensures we only consider numeric values
+                }
+            },
+            {
+                "$group": {
+                    "_id": f"${column_name}",
+                    "count": {"$sum": 1}
+                }
+            }
+        ])
+
+        # Initialize counters for each range
+        like1 = 0
+        like2 = 0
+        like3 = 0
+        like4 = 0
+
+        # Iterate through the aggregated data and categorize it
+        for item in data:
+            value = item["_id"]
+            count = item["count"]
+
+            if value == 1:
+                like1 += count
+            elif value == 2:
+                like2 += count
+            elif value == 3:
+                like3 += count
+            else:
+                like4 += count
+
+        # Return the counts as a JSON object
+        result = {
+            "1": like1,
+            "2": like2,
+            "3": like3,
+            "4": like4
         }
 
         return jsonify(result), 200
