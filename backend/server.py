@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from pymongo import MongoClient
+from datetime import datetime
 
 MONGO_URI = 'mongodb+srv://shivam:shivam28@project1.kja17z2.mongodb.net/' 
 DATABASE_NAME = "BlackCoffer" 
@@ -168,6 +169,27 @@ def value_aggregation():
         }
 
         return jsonify(result), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+
+@app.route('/future-predictions', methods=['GET'])
+def future_predictions():
+    try:
+        # Parse the 'limit' parameter if provided to limit the number of results
+        limit = int(request.args.get('limit', 5))
+
+        current_year = datetime.now().year
+
+        results = list(collection.find(
+            {"end_year": {"$gt": current_year}}
+        ).sort("end_year", 1).limit(limit))
+
+
+        formatted_results = [{key: value for key, value in doc.items() if key != '_id'} for doc in results]
+
+        return jsonify(formatted_results), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
