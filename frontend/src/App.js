@@ -5,6 +5,7 @@ import { useStateContext } from './contexts/ContextProvider';
 import Navbar from './components/Navbar';
 import Pestles from './components/Pestles';
 import HeatMap from './components/Charts/HeatMap';
+import Top from './components/Top';
 import IntensityPage from '../src/pages/IntensityPage';
 
 const App = () => {
@@ -54,6 +55,17 @@ const App = () => {
             <Route path="/region" element={<div>Region Page</div>} />
             <Route path="/city" element={<div>City Page</div>} />
           </Routes>
+         <div className="flex items-center justify-center gap-8 mt-40"> 
+  {/* Pestles Component */}
+  <div className="w-1/2 flex justify-center border-2 border-gray-300 p-4">
+    <Pestles /> {/* This is your Pie Chart */}
+  </div>
+
+  {/* HeatMap Component */}
+  <div className="w-1/2 flex justify-center border-2 border-gray-300 p-4">
+    <HeatMap /> {/* This is your HeatMap */}
+  </div>
+</div>
         </div>
       </div>
     </div>

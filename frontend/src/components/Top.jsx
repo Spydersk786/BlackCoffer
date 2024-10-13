@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-const IntensityTop = () => {
+const Top = ({ field }) => {
   const [articles, setArticles] = useState([]);
 
   // Fetch top five articles from the API
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5001/top-five?field=intensity');
+        const response = await fetch(`http://127.0.0.1:5001/top-five?field=${field}`);
         const data = await response.json();
         console.log(data); // Check the structure of the response
         if (Array.isArray(data)) {
@@ -23,11 +23,11 @@ const IntensityTop = () => {
     };
 
     fetchData();
-  }, []);
+  }, [field]);
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-semibold text-center mb-8">Top 5 Articles by Intensity</h1>
+      <h1 className="text-3xl font-semibold text-center mb-8">Top 5 Articles by {field.charAt(0).toUpperCase() + field.slice(1)}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.length > 0 ? (
           articles.map((article, index) => (
@@ -38,6 +38,9 @@ const IntensityTop = () => {
               </p>
               <p className="text-gray-700 mb-4">
                 <span className="font-semibold">Relevance:</span> {article.relevance}
+              </p>
+              <p className="text-gray-700 mb-4">
+                <span className="font-semibold">Likelihood:</span> {article.likelihood}
               </p>
               <p className="text-gray-700 mb-4">
                 <span className="font-semibold">Published Year:</span> {article.start_year}
@@ -60,4 +63,4 @@ const IntensityTop = () => {
   );
 };
 
-export default IntensityTop;
+export default Top;
