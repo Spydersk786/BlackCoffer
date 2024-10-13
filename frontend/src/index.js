@@ -4,7 +4,7 @@ import App from './App';
 import { ContextProvider } from './contexts/ContextProvider';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
-import Pestles from './components/Pestles'; // Importing Pestles component
+
 
 const container = document.getElementById('root');
 const root = createRoot(container);
