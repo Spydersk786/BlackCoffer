@@ -203,11 +203,11 @@ def value_aggregation_relevance():
             count = item["count"]
 
             if value <= 3:
-                range_0_10 += count
+                range_0_3 += count
             elif 4 <= value <= 7:
-                range_11_30 += count
+                range_4_7 += count
             else: 
-                range_31_50 += count
+                range_8_10 += count
 
 
         # Return the counts as a JSON object
