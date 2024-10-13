@@ -5,7 +5,7 @@ import { BsChatLeft } from 'react-icons/bs';
 import { RiNotification3Line } from 'react-icons/ri';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { useStateContext } from '../contexts/ContextProvider';
-import avatar2 from '/Users/chetandongare/Desktop/BlackCoffer/frontend/src/data/avatar2.jpg'
+import avatar2 from '../data/avatar2.jpg'
 
 const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   <button

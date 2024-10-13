@@ -4,7 +4,7 @@ import Sidebar from './components/Sidebar';
 import { useStateContext } from './contexts/ContextProvider';
 import Navbar from './components/Navbar';
 import Pestles from './components/Pestles'; 
-import HeatMap from '/Users/chetandongare/Desktop/BlackCoffer/frontend/src/components/Charts/HeatMap.jsx';
+import HeatMap from './components/Charts/HeatMap';
 import IntensityTop from './components/IntensityTop';
 
 const App = () => {
