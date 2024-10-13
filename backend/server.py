@@ -34,6 +34,11 @@ def count_entries(field_name):
     try:
         pipeline = [
             {
+                '$match': {
+                    field_name: {'$ne': ''}  # Skip documents where the field is an empty string
+                }
+            },
+            {
                 '$group': {
                     '_id': f"${field_name}",
                     'count': { '$sum': 1 }
@@ -62,6 +67,7 @@ def filter_data():
         region = request.args.get('region')
         source = request.args.get('source')
         country = request.args.get('country')
+        pestle = request.args.get('pestle')
         
         query = {}
         
@@ -77,6 +83,8 @@ def filter_data():
             query['source'] = source
         if country:
             query['country'] = country
+        if pestle:
+            query['pestle'] = pestle
 
         print(query)
 
