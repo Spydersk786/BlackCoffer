@@ -5,6 +5,7 @@ import { useStateContext } from './contexts/ContextProvider';
 import Navbar from './components/Navbar';
 import Pestles from './components/Pestles'; 
 import HeatMap from '/Users/chetandongare/Desktop/BlackCoffer/frontend/src/components/Charts/HeatMap.jsx';
+import IntensityTop from './components/IntensityTop';
 
 const App = () => {
   const { activeMenu } = useStateContext();
@@ -46,18 +47,22 @@ const App = () => {
             <Route path="/city" element={<div>City Page</div>} />
           </Routes>
 
-         <div className='flex items-center'> 
-          {/* Ensure only one small chart remains */}
-          <div className="mt-40 absolute top-0 w-300px flex justify-center border-2 border-gray-300 p-4 ">
-            <Pestles /> {/* This is your single small Pie Chart */}
-          </div>
+         <div className="flex items-center justify-center gap-8 mt-40"> 
+  {/* Pestles Component */}
+  <div className="w-1/2 flex justify-center border-2 border-gray-300 p-4">
+    <Pestles /> {/* This is your Pie Chart */}
+  </div>
 
-          
+  {/* HeatMap Component */}
+  <div className="w-1/2 flex justify-center border-2 border-gray-300 p-4">
+    <HeatMap /> {/* This is your HeatMap */}
+  </div>
+</div>
 
-          
+       <div>
+        <IntensityTop />
+       </div>
 
-
-          </div>
         </div>
       </div>
     </div>
