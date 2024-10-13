@@ -62,6 +62,7 @@ def filter_data():
         region = request.args.get('region')
         source = request.args.get('source')
         country = request.args.get('country')
+        pestle = request.args.get('pestle')
         
         query = {}
         
@@ -77,6 +78,8 @@ def filter_data():
             query['source'] = source
         if country:
             query['country'] = country
+        if pestle:
+            query['pestle'] = pestle
 
         print(query)
 
