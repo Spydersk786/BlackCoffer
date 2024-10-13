@@ -162,9 +162,9 @@ def value_aggregation():
         # Return the counts as a JSON object
         result = {
             "0_10": range_0_10,
-            "11_50": range_11_30,
-            "51_100": range_31_50,
-            "greater_100": range_greater_50
+            "11_30": range_11_30,
+            "31_50": range_31_50,
+            "greater_50": range_greater_50
         }
 
         return jsonify(result), 200
