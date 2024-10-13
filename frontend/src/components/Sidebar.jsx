@@ -38,7 +38,7 @@ const Sidebar = () => {
             Navigation
           </p>
         )}
-        {['Intensity', 'Likelihood', 'Relevance', 'Year', 'Country', 'Topics', 'Region', 'City'].map((item) => (
+        {['Intensity', 'Likelihood', 'Relevance', 'Year', 'Country'].map((item) => (
           <NavLink
             key={item}
             to={`/${item.toLowerCase()}`}

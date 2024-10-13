@@ -6,11 +6,10 @@ export const ContextProvider = ({ children }) => {
   const [activeMenu, setActiveMenu] = useState(true);
   const [screenSize, setScreenSize] = useState(window.innerWidth);
   const [isClicked, setIsClicked] = useState({
-    cart: false,
-    chat: false,
     notification: false,
     userProfile: false,
   });
+  const [currentColor, setCurrentColor] = useState('#03C9D7'); // Default color
 
   const handleClick = (clickedItem) => {
     setIsClicked({ ...isClicked, [clickedItem]: true });
@@ -32,6 +31,8 @@ export const ContextProvider = ({ children }) => {
         isClicked,
         setIsClicked,
         handleClick,
+        currentColor,
+        setCurrentColor,
       }}
     >
       {children}
