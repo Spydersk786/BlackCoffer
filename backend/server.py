@@ -106,5 +106,69 @@ def get_top_five():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
+@app.route('/value-aggregation', methods=['GET'])
+def value_aggregation():
+    try:
+        # Replace 'column_name' with the name of your column
+        column_name = request.args.get('column')
+
+        # Ensure the column name is provided
+        if not column_name:
+            return jsonify({"error": "Column name is required"}), 400
+        
+        allowed_fields = ['intensity', 'end_year', 'likelihood','relevance']
+
+        if column_name not in allowed_fields:
+            return jsonify({"error": f"Field must be one of {allowed_fields}"}), 400
+
+        # Aggregate unique values and their counts, ignoring string types
+        data = collection.aggregate([
+            {
+                "$match": {
+                    column_name: {"$type": "number"}  # Ensures we only consider numeric values
+                }
+            },
+            {
+                "$group": {
+                    "_id": f"${column_name}",
+                    "count": {"$sum": 1}
+                }
+            }
+        ])
+
+        # Initialize counters for each range
+        range_0_10 = 0
+        range_11_30 = 0
+        range_31_50 = 0
+        range_greater_50 = 0
+
+        # Iterate through the aggregated data and categorize it
+        for item in data:
+            value = item["_id"]
+            count = item["count"]
+
+            if value <= 10:
+                range_0_10 += count
+            elif 11 <= value <= 30:
+                range_11_30 += count
+            elif 30 <= value <= 50:
+                range_31_50 += count
+            else:
+                range_greater_50 += count
+
+        # Return the counts as a JSON object
+        result = {
+            "0_10": range_0_10,
+            "11_50": range_11_30,
+            "51_100": range_31_50,
+            "greater_100": range_greater_50
+        }
+
+        return jsonify(result), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
