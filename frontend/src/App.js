@@ -5,7 +5,7 @@ import { useStateContext } from './contexts/ContextProvider';
 import Navbar from './components/Navbar';
 import Pestles from './components/Pestles'; 
 import HeatMap from './components/Charts/HeatMap';
-import IntensityTop from './components/IntensityTop';
+import Top from './components/Top';
 
 const App = () => {
   const { activeMenu } = useStateContext();
@@ -60,7 +60,9 @@ const App = () => {
 </div>
 
        <div>
-        <IntensityTop />
+        <Top field='intensity'/>
+        <Top field='relevance'/>
+        <Top field='likelihood'/>
        </div>
 
         </div>
