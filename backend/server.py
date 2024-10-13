@@ -34,6 +34,11 @@ def count_entries(field_name):
     try:
         pipeline = [
             {
+                '$match': {
+                    field_name: {'$ne': ''}  # Skip documents where the field is an empty string
+                }
+            },
+            {
                 '$group': {
                     '_id': f"${field_name}",
                     'count': { '$sum': 1 }
