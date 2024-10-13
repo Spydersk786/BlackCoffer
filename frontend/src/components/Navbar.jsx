@@ -21,8 +21,17 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   </button>
 );
 
-const Navbar = () => {
-  const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
+const Navbar = ({ onLogout }) => {
+  const { 
+    currentColor, 
+    activeMenu, 
+    setActiveMenu, 
+    handleClick, 
+    isClicked, 
+    setIsClicked, 
+    setScreenSize, 
+    screenSize 
+  } = useStateContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('');
   const [filterOptions, setFilterOptions] = useState([]);
@@ -89,7 +98,22 @@ const Navbar = () => {
     setSearchTerm('');
   };
 
-  const filters = ['End_Year', 'Topic', 'Sector', 'Region', 'Pestle',  'Country'];
+  const filters = ['End_Year', 'Topic', 'Sector', 'Region', 'Pestle', 'Country'];
+
+  const handleLogout = () => {
+    onLogout();
+    setIsClicked(prevState => ({
+      ...prevState,
+      userProfile: false
+    }));
+  };
+
+  const handleProfileClick = () => {
+    setIsClicked(prevState => ({
+      ...prevState,
+      userProfile: !prevState.userProfile
+    }));
+  };
 
   return (
     <div className="flex flex-col p-4 md:ml-6 md:mr-6 bg-white shadow-md dark:bg-gray-800">
@@ -127,18 +151,36 @@ const Navbar = () => {
         </form>
 
         <div className="flex items-center space-x-4">
-          <NavButton title="Notifications" customFunc={() => handleClick('notification')} color={currentColor} icon={<RiNotification3Line />} dotColor="rgb(254, 201, 15)" />
+          <NavButton 
+            title="Notifications" 
+            customFunc={() => handleClick('notification')} 
+            color={currentColor} 
+            icon={<RiNotification3Line />} 
+            dotColor="rgb(254, 201, 15)" 
+          />
 
-          <div
-            className="flex items-center gap-2 cursor-pointer p-2 hover:bg-gray-100 rounded-lg"
-            onClick={() => handleClick('userProfile')}
-          >
-            <img className="w-8 h-8 rounded-full" src={avatar2} alt="user-profile" />
-            <p>
-              <span className="text-gray-400 text-sm">Hi,</span>{' '}
-              <span className="text-gray-600 font-bold text-sm">Nisha</span>
-            </p>
-            <MdKeyboardArrowDown className="text-gray-400 text-lg" />
+          <div className="relative">
+            <div
+              className="flex items-center gap-2 cursor-pointer p-2 hover:bg-gray-100 rounded-lg"
+              onClick={handleProfileClick}
+            >
+              <img className="w-8 h-8 rounded-full" src={avatar2} alt="user-profile" />
+              <p>
+                <span className="text-gray-400 text-sm">Hi,</span>{' '}
+                <span className="text-gray-600 font-bold text-sm">Nisha</span>
+              </p>
+              <MdKeyboardArrowDown className="text-gray-400 text-lg" />
+            </div>
+            {isClicked.userProfile && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md overflow-hidden shadow-xl z-10">
+                <button
+                  onClick={handleLogout}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
