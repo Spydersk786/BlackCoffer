@@ -1,11 +1,22 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
+import { ContextProvider } from './contexts/ContextProvider';
+import { BrowserRouter } from 'react-router-dom';
+import './index.css';
+import Pestles from './components/Pestles'; // Importing Pestles component
 
 const container = document.getElementById('root');
 const root = createRoot(container);
+
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <ContextProvider>
+        {/* Main App component */}
+        <App />
+        
+      </ContextProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
