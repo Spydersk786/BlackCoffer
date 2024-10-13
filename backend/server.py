@@ -6,7 +6,6 @@ DATABASE_NAME = "BlackCoffer"
 COLLECTION_NAME = "data" 
 
 app = Flask(__name__)
-CORS(app)  # Allow all origins (for development only)
 
 client = MongoClient(MONGO_URI)
 db = client[DATABASE_NAME]
@@ -53,15 +52,13 @@ def count_entries(field_name):
 @app.route('/filter', methods=['GET'])
 def filter_data():
     try:
-        # Get query parameters
         end_year = request.args.get('end_year')
-        topic = request.args.get('topic')  # Only allows a single topic (e.g., ?topic=topic1)
+        topic = request.args.get('topic') 
         sector = request.args.get('sector')
         region = request.args.get('region')
         source = request.args.get('source')
         country = request.args.get('country')
         
-        # Build the query based on provided filters
         query = {}
         
         if end_year:
@@ -78,10 +75,30 @@ def filter_data():
             query['country'] = country
 
         print(query)
-        # Query the database
+
         results = list(collection.find(query))
 
-        # Convert the MongoDB cursor to a JSON-compatible list
+        formatted_results = [{key: str(value) for key, value in doc.items() if key != '_id'} for doc in results]
+
+        return jsonify(formatted_results), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/top-five', methods=['GET'])
+def get_top_five():
+    try:
+        field = request.args.get('field')
+        
+        allowed_fields = ['intensity', 'end_year', 'likelihood','relevance']
+
+        if field not in allowed_fields:
+            return jsonify({"error": f"Field must be one of {allowed_fields}"}), 400
+        
+        query = {field: {"$type": ["double", "int"]}}
+
+        results = list(collection.find(query).sort(field, -1).limit(5))
+
         formatted_results = [{key: str(value) for key, value in doc.items() if key != '_id'} for doc in results]
 
         return jsonify(formatted_results), 200
